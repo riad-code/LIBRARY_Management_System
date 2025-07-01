@@ -5,9 +5,10 @@ namespace Libary_Management_System.Models
 {
     public class BookCategory
     {
+        [Key]  // ✅ Explicitly declare this as the primary key
         public int CategoryID { get; set; }
 
-        [Required(ErrorMessage = "Category name is required")]
+        [Required]
         public string CategoryName { get; set; }
 
         public string? Description { get; set; }
