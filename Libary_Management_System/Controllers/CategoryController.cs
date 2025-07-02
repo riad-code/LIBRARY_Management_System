@@ -57,9 +57,20 @@ namespace Libary_Management_System.Controllers
             });
         }
 
-        // ✅ POST: Update category (AJAX)
+        // GET: Load Edit Page
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var category = await _context.BookCategories.FindAsync(id);
+            if (category == null)
+                return NotFound();
+
+            return View(category);
+        }
+
+        // POST: Handle AJAX edit
         [HttpPost]
-        public async Task<IActionResult> Edit([FromForm] BookCategory model)
+        public async Task<IActionResult> Edit(BookCategory model)
         {
             if (!ModelState.IsValid)
                 return Json(new { success = false, message = "Invalid data." });
@@ -76,6 +87,10 @@ namespace Libary_Management_System.Controllers
 
             return Json(new { success = true, message = "Category updated successfully." });
         }
+
+
+
+
 
         // ✅ POST: Delete category (AJAX)
         [HttpPost]

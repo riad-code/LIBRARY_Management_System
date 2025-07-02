@@ -28,7 +28,10 @@
                     <td>@item.CategoryName</td>
                     <td>@item.Description</td>
                     <td class="text-center">
-                        <a asp-action="Edit" asp-route-id="@item.CategoryID" class="btn btn-sm btn-warning">✏️ Edit</a>
+                      <a asp-action="Edit" asp-route-id="@item.CategoryID" class="btn btn-sm btn-primary">
+    <i class="fas fa-edit"></i> Edit
+</a>
+
                         <button class="btn btn-sm btn-danger delete-btn" data-id="@item.CategoryID">🗑️ Delete</button>
                     </td>
                 </tr>

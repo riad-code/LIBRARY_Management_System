@@ -2,72 +2,60 @@
 
 @{
     ViewData["Title"] = "Edit Category";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Ensure you're using the correct layout
 }
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
-
 <div class="container mt-4">
-    <div class="card shadow p-4">
-        <div class="card-header bg-primary text-white">
-            <h3>Edit Book Category</h3>
-        </div>
-        <div class="card-body">
-            <form id="editCategoryForm">
-                <input type="hidden" name="CategoryID" value="@Model.CategoryID" />
-
-                <div class="mb-3">
-                    <label for="CategoryName" class="form-label">Category Name</label>
-                    <input type="text" class="form-control" name="CategoryName" value="@Model.CategoryName" required />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Edit Book Category</h4>
                 </div>
+                <div class="card-body">
+                    <form id="editForm">
+                        <input type="hidden" name="CategoryID" value="@Model.CategoryID" />
 
-                <div class="mb-3">
-                    <label for="Description" class="form-label">Description</label>
-                    <textarea class="form-control" name="Description" rows="3">@Model.Description</textarea>
-                </div>
+                        <div class="mb-3">
+                            <label class="form-label">Category Name</label>
+                            <input type="text" name="CategoryName" value="@Model.CategoryName" class="form-control" required />
+                        </div>
 
-                <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-save"></i> Update
-                    </button>
-                    <a asp-action="Index" class="btn btn-secondary">Back</a>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="Description" class="form-control" rows="3">@Model.Description</textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">Update Category</button>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-    $(document).ready(function () {
-        $('#editCategoryForm').submit(function (e) {
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $('#editForm').submit(function (e) {
             e.preventDefault();
 
-            Swal.fire({
-                title: 'Updating...',
-                allowOutsideClick: false,
-                didOpen: () => Swal.showLoading()
-            });
-
             $.ajax({
+                url: '/Category/Edit',
                 type: 'POST',
-                url: '/BookCategory/EditCategory',
                 data: $(this).serialize(),
                 success: function (res) {
-                    Swal.fire({
-                        icon: res.success ? 'success' : 'error',
-                        title: res.success ? 'Updated!' : 'Error!',
-                        text: res.message
-                    }).then(() => {
-                        if (res.success) window.location.href = '/BookCategory/Index';
-                    });
+                    if (res.success) {
+                        Swal.fire('Updated!', res.message, 'success')
+                            .then(() => window.location.href = '/Category/Index');
+                    } else {
+                        Swal.fire('Error', res.message, 'error');
+                    }
                 },
                 error: function () {
-                    Swal.fire('Error', 'Something went wrong.', 'error');
+                    Swal.fire('Oops!', 'Something went wrong.', 'error');
                 }
             });
         });
-    });
-</script>
+    </script>
+}

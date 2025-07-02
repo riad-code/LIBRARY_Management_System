@@ -41,7 +41,7 @@ namespace Libary_Management_System.Data.Migrations
 
                     b.HasIndex("CategoryID");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("Libary_Management_System.Models.BookCategory", b =>
@@ -61,7 +61,7 @@ namespace Libary_Management_System.Data.Migrations
 
                     b.HasKey("CategoryID");
 
-                    b.ToTable("BookCategories");
+                    b.ToTable("BookCategories", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
