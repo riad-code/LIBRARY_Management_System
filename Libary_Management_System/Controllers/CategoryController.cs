@@ -23,6 +23,11 @@ namespace Libary_Management_System.Controllers
             var categories = await _context.BookCategories.ToListAsync();
             return View(categories);
         }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
 
         // ✅ POST: Create category (AJAX)
         [HttpPost]
@@ -111,5 +116,6 @@ namespace Libary_Management_System.Controllers
 
             return Json(new { success = true, message = "Category deleted successfully." });
         }
+
     }
 }

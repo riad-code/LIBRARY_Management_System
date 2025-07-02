@@ -8,13 +8,13 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
 
 <div class="container mt-4">
-    <div class="d-flex justify-content-between mb-3">
-        <h2 class="text-primary">📚 Book Categories</h2>
-        <a asp-action="Create" class="btn btn-success">➕ Add New</a>
+    <div class="d-flex justify-content-between bg-primary mb-3">
+        <h2 class="text-white"> Book Categories</h2>
+        <a asp-action="Create" class="btn  btn-success"> Add New </a>
     </div>
 
     <table class="table table-bordered table-striped">
-        <thead class="table-dark">
+        <thead class="table-primary">
             <tr>
                 <th>Category Name</th>
                 <th>Description</th>
@@ -28,11 +28,14 @@
                     <td>@item.CategoryName</td>
                     <td>@item.Description</td>
                     <td class="text-center">
-                      <a asp-action="Edit" asp-route-id="@item.CategoryID" class="btn btn-sm btn-primary">
-    <i class="fas fa-edit"></i> Edit
-</a>
+                        <a asp-action="Edit" asp-route-id="@item.CategoryID" class="btn btn-sm btn-primary">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
 
-                        <button class="btn btn-sm btn-danger delete-btn" data-id="@item.CategoryID">🗑️ Delete</button>
+                        <button class="btn btn-danger btn-sm deleteBtn" data-id="@item.CategoryID">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
+
                     </td>
                 </tr>
             }
@@ -43,39 +46,42 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    $(document).ready(function () {
-        $('.delete-btn').click(function () {
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).on('click', '.deleteBtn', function () {
             var id = $(this).data('id');
 
             Swal.fire({
                 title: 'Are you sure?',
-                text: 'You will not be able to recover this category!',
+                text: "This action cannot be undone!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'Cancel'
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/BookCategory/DeleteCategory',
-                        method: 'POST',
+                        url: '/Category/Delete',
+                        type: 'POST',
                         data: { id: id },
                         success: function (res) {
-                            Swal.fire({
-                                icon: res.success ? 'success' : 'error',
-                                title: res.success ? 'Deleted!' : 'Error!',
-                                text: res.message
-                            }).then(() => {
-                                if (res.success) location.reload();
-                            });
+                            if (res.success) {
+                                Swal.fire('Deleted!', res.message, 'success')
+                                    .then(() => location.reload());
+                            } else {
+                                Swal.fire('Error!', res.message, 'error');
+                            }
                         },
                         error: function () {
-                            Swal.fire('Error', 'Something went wrong.', 'error');
+                            Swal.fire('Oops!', 'Something went wrong.', 'error');
                         }
                     });
                 }
             });
         });
-    });
-</script>
+    </script>
+}
